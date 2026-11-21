@@ -1,6 +1,7 @@
 from src.rag.config.textsplit import getSplit
 from src.rag.config.chroma import getChroma
 from langchain_core.documents import Document
+from datetime import datetime, timedelta, timezone
 
 
 def chunking(text: str, videoId: str) -> list[str]:
@@ -18,12 +19,17 @@ def chunking(text: str, videoId: str) -> list[str]:
         splitter = getSplit()
         texts: list[str] = splitter.split_text(text)
 
+
+        expiresAt = (
+                datetime.now(timezone.utc) + timedelta(days=7)
+            ).timestamp()
+
         docs = []
 
         for text in texts:
             doc = Document(
                 page_content=text,
-                metadata={"source": videoId}
+                metadata={"source": videoId,"expiresAt": expiresAt}
             )
             docs.append(doc)
 

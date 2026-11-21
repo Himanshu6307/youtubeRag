@@ -1,8 +1,20 @@
 from fastapi import FastAPI
 from src.rag.services.indexing.index import chunking
 from src.rag.services.indexing.index import chromaEmbeded
+from contextlib import asynccontextmanager
+from src.rag.shared.scheduler import startScheduler, scheduler
 
-app = FastAPI()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    startScheduler()
+
+    yield
+
+    scheduler.shutdown()
+
+app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def Home():
@@ -22,5 +34,10 @@ def Home():
     chromaEmbeded(chunks,"1")
 
     return {
-        "message:""running at 8081"
+        "message":"running at 8081"
     }
+
+
+
+
+
