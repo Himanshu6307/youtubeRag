@@ -11,7 +11,7 @@ class body(BaseModel):
 
 
 
-def chunkAndEmbeded(req: Body):
+def chunkAndEmbeded(req:body):
 
     text = req.text
     videoId = req.videoId
@@ -27,7 +27,7 @@ def chunkAndEmbeded(req: Body):
 
         if chunk is None:
             return {
-                
+
                     "message": "Video chunked and embedded successfully",
                     "success": True
                 }
