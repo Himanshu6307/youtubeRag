@@ -4,7 +4,7 @@ from langchain_core.documents import Document
 from datetime import datetime, timedelta, timezone
 
 
-def chunking(text: str, videoId: str) -> list[str]:
+def chunking(text: str, videoId: str, start:float) -> list[str]:
 
     vector_store = getChroma()
 
@@ -29,7 +29,7 @@ def chunking(text: str, videoId: str) -> list[str]:
         for text in texts:
             doc = Document(
                 page_content=text,
-                metadata={"source": videoId,"expiresAt": expiresAt}
+                metadata={"source": videoId,"expiresAt": expiresAt,"start":start}
             )
             docs.append(doc)
 
